@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -194,11 +195,14 @@ public class UserController {
                     required = true,
                     example = "eoblue23@gmail.com"
             )
-            @PathVariable("email") String email) {
+            @PathVariable("email") String email, HttpServletResponse response) {
         try {
             UserDTO user = userService.searchByEmail(email);
 
             if(user != null) {
+                System.out.println(user);
+                int statusCode = response.getStatus();
+                System.out.println("HTTP Status Code: " + statusCode);
                 return ResponseEntity.accepted().body(user);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("없는 회원");
